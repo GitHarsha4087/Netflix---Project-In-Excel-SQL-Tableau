@@ -65,4 +65,5 @@ Contains:
 ---
 
 ## 🚀 How to Use
-1.   git clone https://<GitHarsha4087>//Netflix-SQL-Project.git
+1.     git clone https://github.com/<GitHarsha-4087>/Netflix-SQL-Project.git
+
