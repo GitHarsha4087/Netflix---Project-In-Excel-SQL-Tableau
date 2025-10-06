@@ -1,135 +1,68 @@
-     
- -- SELECT * FROM netflix_data.Netflix; 
- 
--- Basic Queries
+ # 🎬 Netflix Data Analysis using SQL and Tableau
 
--- 1. How many movies and shows are there in the dataset? display the count for each type
--- select type,count(*) as total_count
--- from netflix
--- group by type
+## 📖 Project Overview
+This project analyzes the **Netflix Titles dataset (`netflix_titles.csv`)** to uncover trends and insights about movies and TV shows available on the platform.  
+Using **SQL** for data exploration and **Tableau** for visualization, the project highlights how Netflix’s content strategy evolved over time across genres, countries, and ratings.
 
--- 2. what percentage of content doesn't have a country associate with it
--- select count(case when country is null then true end)/
---        count(*) as percentage_without_country 
---        from netflix
+---
 
--- 3. Find top 3 directors with most content on netflix.Retreive d.name,count of title and most recent year content
--- select director as director_name,count(title) as total_cnt,max(release_year) as most_rcntyear_content
--- from netflix
--- group by director_name
--- order by most_rcntyear_content desc
--- limit 3
+## 🧠 Objectives
+- Understand the distribution of Movies vs. TV Shows  
+- Identify top genres and content-producing countries  
+- Analyze content growth by release year  
+- Examine rating patterns and audience distribution  
 
+---
 
--- Intermediate queries
+## 💻 Tools & Technologies
+- **SQL** – Data cleaning, exploration, and analysis  
+- **Tableau Public** – Data visualization and dashboard creation  
+- **Excel / CSV** – Initial dataset and preprocessing  
 
--- 1. Find the top 3 directors with the most content on netflix.display director name,count of titles and year.
+---
 
--- with director_stats as ( 
---                         select director as director_name,
--- 						count(*) as titles_count,
---                         max(release_year) as most_recent_year 
---                         from netflix
---                          group by director_name)
---                         select director_name, titles_count, most_recent_year
---                         from director_stats
---                         order by titles_count desc
---                         limit 3
+## 🧩 Key SQL Concepts Used
+- `GROUP BY`, `HAVING`, and `CASE` statements for aggregations  
+- `CTE` (Common Table Expressions) for modular queries  
+- `JOIN` operations for combining relevant data  
+- `WINDOW FUNCTIONS` for ranking and trend analysis  
+- `DATE FUNCTIONS` for time-based insights  
 
+---
 
--- 2. calculate the percentage of movies vs shows added to netflix from 2015 to 2021
+## 📊 Tableau Dashboard
 
--- with yearly_counts as ( 
--- 					   select 
---                              type,
---                              count(*) as count
---                              from netflix
---                              where date_added between '01-01-15' and '31-12-21'
---                              group by 1)
--- 			                  select  
---                                    sum(case when type = 'movie' then count else 0 end)/sum(count) *100.0 as movie_percentage,
---                                    sum(case when type = 'tv show' then count else 0 end)/sum(count) *100.0 as tv_show_percentage
---                                    from yearly_counts
+Below are link and snapshot of the interactive **Netflix Dashboard** built in Tableau:
+Tableau public link : [https://public.tableau.com/app/profile/harsha.vardhan2453/viz/TableauDashboard-Netflix/NetflixHarsha?publish=yes]
 
- 
---  -- Advanced Query
+![Netflix Dashboard] (https://media.licdn.com/dms/image/v2/D5622AQFzuCTPDVAa-w/feedshare-shrink_2048_1536/B56Zm6DQaCJ4Aw-/0/1759763042494?e=1762387200&v=beta&t=32yWZaHebMJWBbxv0mwXq7EUI9NwoELF2a0MqIM8hvQ)
 
---  -- 1. Calculate the month over month growth rate of content added to netflix for each genre.what are top 5 fastest growing genres.
---  with genre_monthly_content as
---                              ( select genre,month,count(*) as content_count
---                                             from netflix
---                                             where date_added is not null and genre is not null
---                                             group by genre,month),
---      monthly_growth_rate as 
--- 						  ( select genre,month,content_count,lag(content_count) over(partition by genre order by month) as prev_content_count,
--- 						   case when  lag(content_count) over(partition by genre order by month) is null then null
--- 						else ((content_count - lag(content_count) over(partition by genre order by month))/  lag(content_count) over(partition by genre order by month)) * 100
--- 						     end as growth_rate from genre_monthly_content)
---                          
---                    select genre,avg(growth_rate) as avg_growth_rate
---                           from monthly_growth_rate
---                           where growth_rate is not null
---                           group by genre
---                           order by avg_growth_rate desc limit 5 
-                     
-                     
--- 2. Find the most common rating for movies and TV shows
+### Dashboard Insights:
+- **Movies** dominate the catalog (≈68%)  
+- **Drama** and **Comedy** are the most common genres  
+- Rapid growth in **TV Show releases** after 2015  
+- **USA**, **India**, and **UK** produce the majority of content  
+- **TV-MA** is the most frequent rating category  
 
-with cte1 as (
-              select type,rating,count(*) as total_count
-              from netflix
-              group by 1,2),
-     cte2 as (select type,rating,total_count,
-              rank() over(partition by type order by total_count desc) as ranked_rating
-              from cte1)
-select  type,rating as most_common_rating,total_count
-from cte2
-where ranked_rating <= 2
-   
-                
+---
 
+## 📈 Dataset Information
+Dataset: [`netflix_titles.csv`](https://www.kaggle.com/datasets/shivamb/netflix-shows)  
+Contains:
+- `show_id` – Unique identifier for each title  
+- `type` – Movie or TV Show  
+- `title` – Name of the title  
+- `director`, `cast`, `country`, `date_added`, `release_year`, `rating`, `duration`, `listed_in`, `description`
 
+---
 
+## 🔍 Key Findings
+1. Netflix’s library is dominated by **Movies (68%)**.  
+2. **TV content** has grown significantly since 2015.  
+3. **US** and **India** lead global content production.  
+4. Most shows are rated **TV-MA** or **TV-14**, targeting mature audiences.  
 
- 
+---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+## 🚀 How to Use
+1.   git clone https://github.com/<GitHarsha4087>/Netflix-SQL-Project.git
